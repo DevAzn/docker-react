@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v2
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        run: docker build -t devazn/react-test -f Dockerfile.dev .
-        run: docker run -e CI=true devazn/react-test npm test
+      - uses: actions/checkout@v2
+      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build -t devazn/react-test -f Dockerfile.dev .
+      - run: docker run -e CI=true devazn/react-test npm test
  
       # - run: docker build -t devazn/multi-client-10-14 ./client
       # - run: docker build -t devazn/multi-nginx-10-14 ./nginx
@@ -25,17 +25,17 @@ jobs:
       # - run: docker push devazn/multi-worker-10-14
  
       - name: Generate deployment package
-        run: zip -r deploy.zip . -x '*.git*'
+      - run: zip -r deploy.zip . -x '*.git*'
  
       - name: Deploy to EB
-        uses: einaregilsson/beanstalk-deploy@v21
+      - uses: einaregilsson/beanstalk-deploy@v21
         with:
-          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
-          application_name: Docker-React-EBS
-          environment_name: Docker-React-EBS-env
-          existing_bucket_name: elasticbeanstalk-us-east-1-542494515155
-          region: us-east-1
-          version_label: ${{ github.sha }}
-          wait_for_environment_recovery: 60
-          deployment_package: deploy.zip
+        - aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+        - aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+        - application_name: Docker-React-EBS
+        - environment_name: Docker-React-EBS-env
+        - existing_bucket_name: elasticbeanstalk-us-east-1-542494515155
+        - region: us-east-1
+        - version_label: ${{ github.sha }}
+        - wait_for_environment_recovery: 60
+        - deployment_package: deploy.zip
