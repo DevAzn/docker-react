@@ -11,3 +11,16 @@ before_install:
 # npm by default in npm run test does not exit
 script: 
   - docker run -e CI=true devazn/docker-react npm run test
+
+deploy:
+  provider: "elasticbeanstalk"
+  region: "us-east-1"
+  app: "docker-react"
+  environment: "docker-react-env"
+  bucket_name: "elasticbeanstalk-us-east-1-542494515155"
+  bucket_path: "docker-react"
+  on:
+    branch: main
+  access_key_id: "$AWS_ACCESS_KEY"
+  secrect_access_key: "$AWS_SECRECT_KEY"
+  
