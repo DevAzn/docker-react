@@ -10,7 +10,7 @@ before_install:
 # will wait
 # npm by default in npm run test does not exit
 script: 
-  - docker run -p 80:3000 -e CI=true devazn/docker-react npm run test
+  - docker run -p 3000:3000 -e CI=true devazn/docker-react npm run test
 
 deploy:
   provider: "elasticbeanstalk"
